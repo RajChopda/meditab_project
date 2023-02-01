@@ -1,0 +1,13 @@
+﻿using Assignment.Models;
+
+namespace Assignment.ServicesLayer
+{
+    public interface IPatientDemographicsSL
+    {
+        public Task<dynamic> GetPatientDataById(int id);
+        public Task<PatientDemographicsList> GetPatientsData(RequestPatientData req);
+        public Task<int> CreatePatient(PatientDemographics pd);
+        public Task<int> UpdatePatient(int id, PatientDemographics pd);
+        public Task<string> DeletePatient(int id);
+    }
+}

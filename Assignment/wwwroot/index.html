@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EHR</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+        integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="./src/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+</head>
+
+<body>
+    <!-- Toast Message Div -->
+    <div class="toast-message">
+        Success
+        <br>
+        Updated successfully!
+        <i class="fa-solid fa-xmark remove-toast-message cursor-pointer" onclick="removeToastMessage()"></i>
+    </div>
+
+    <!-- Nav -->
+    <div class="w-100">
+        <nav class="navbar">
+            <div class="navicon">
+                <a href="#" style="padding-bottom: 0px;">
+                    <img src="https://iemodemoindia.meditab.com/full-logo.c38ee174b79456191d11.png" alt="logo"
+                        style="height: 40px;">
+                </a>
+                <a href="#"><i class="fa-solid fa-gear"></i></a>
+                <a href="#"><i class="fa-solid fa-magnifying-glass"></i></a>
+                <a href="#"><i class="fa-solid fa-user"></i></a>
+                <a href="#"><i class="fa-solid fa-calendar-days"></i></a>
+                <a href="#"><i class="fa-solid fa-user-shield"></i></a>
+                <a href="#"><i class="fa-solid fa-shield-heart"></i></a>
+                <a href="#"><i class="fa-solid fa-arrow-right-to-bracket"></i></a>
+                <a href="#"><i class="fa-solid fa-notes-medical"></i></a>
+                <a href="#"><i class="fa-solid fa-flask"></i></a>
+                <a href="#"><i class="fa-solid fa-arrow-down"></i></a>
+                <a href="#"><i class="fa-solid fa-arrow-up"></i></a>
+                <a href="#"><i class="fa-solid fa-file-invoice"></i></a>
+                <a href="#"><i class="fa-solid fa-dollar-sign"></i></a>
+                <a href="#"><i class="fa-solid fa-file-invoice-dollar"></i></a>
+                <a href="#"><i class="fa-solid fa-magnifying-glass-dollar"></i></a>
+                <a href="#"><i class="fa-solid fa-hand-holding-dollar"></i></a>
+                <a href="#"><i class="fa-solid fa-envelope-circle-check"></i></a>
+                <a href="#"><i class="fa-solid fa-circle-dollar-to-slot"></i></a>
+                <a href="#"><i class="fa-solid fa-sack-dollar"></i></a>
+                <a href="#"><i class="fa-solid fa-receipt"></i></a>
+                <a href="#"><i class="fa-solid fa-book"></i></a>
+                <a href="#"><i class="fa-solid fa-envelope-open-text"></i></a>
+                <a href="#"><i class="fa-solid fa-chart-line"></i></a>
+            </div>
+            <div class="navsearch">
+                <input width="20" class="searchbar" type="text" placeholder="Search Patient - lname fname dob" />
+                <a href="#"><i class="fa-solid fa-calendar-week"></i></a>
+                <a href="#"><i class="fa-solid fa-circle-question"></i></a>
+                <a href="#"><i class="fa-solid fa-lock"></i></a>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Main -->
+    <div class="main">
+        <!-- Left -->
+        <div class="left">
+            <!-- Patient Bar -->
+            <div class="flex" style="width: 98%; padding: 0.7rem; justify-content: space-between;">
+                <div style="color: #6f6f79; font-size: 1.1rem;">
+                    <span>
+                        Patient Bar
+                    </span>
+                </div>
+                <div class="fa-solid fa-circle-chevron-down cursor-pointer" style="justify-content: right;">
+                </div>
+            </div>
+            <div class="w-100 h-100 flex">
+                <!-- Sidebar -->
+                <div class="sidebar">
+                    <div style="display: flex; flex-direction: row-reverse; height: 2%;">
+                        <i class="fa-solid fa-angle-right cursor-pointer" id="openSidebar" style="display: none;"
+                            onclick="openSidebar()"></i>
+                        <i class="fa-solid fa-angle-left cursor-pointer" id="closeSidebar" onclick="closeSidebar()"></i>
+                    </div>
+                    <div class="sidebar-scroll">
+                        <a href="#">Dashboard</a>
+                        <a href="#" class="active">Demographics</a>
+                        <a href="#">Insurance</a>
+                        <a href="#">Case</a>
+                        <a href="#">Contacts</a>
+                        <a href="#">Employer</a>
+                        <a href="#">Appointments</a>
+                        <a href="#">Encounters</a>
+                        <a href="#">Documents</a>
+                        <a href="#">Notes & Alerts</a>
+                        <a href="#">Forms</a>
+                        <a href="#">Consents</a>
+                        <a href="#">Reminder Preference</a>
+                        <hr>
+                        <a href="#">Allergy</a>
+                        <a href="#">Diagnosis</a>
+                        <a href="#">Family History</a>
+                        <a href="#">Prescription</a>
+                        <a href="#">Lab</a>
+                        <a href="#">Immunization</a>
+                        <a href="#">Vitals</a>
+                        <hr>
+                        <a href="#">Authorization</a>
+                        <a href="#">Claims</a>
+                        <a href="#">Receipts</a>
+                        <a href="#">Receipts</a>
+                        <a href="#">Open Credit</a>
+                        <a href="#">Statements</a>
+                        <a href="#">Ledger</a>
+                    </div>
+                </div>
+
+                <!-- Detail Part -->
+                <div class="detailpart">
+                    <form id="detailsForm" class="h-100">
+                        <!-- Inner Nav -->
+                        <nav class="innernav">
+                            <div>
+                                <input type="checkbox" name="active"> Active <i
+                                    class="fa-solid fa-ellipsis-vertical cursor-pointer"></i>
+                                <button onclick="showToastMessage()">Re-verify</button> <i
+                                    class="fa-solid fa-circle-check cursor-pointer" style="color: green;"></i>
+                                <button type="reset">Cancel Changes</button>
+                                <button type="submit" class="submitbtn">
+                                    <i class="fa-solid fa-triangle-exclamation" style="color: orange;"></i>Save
+                                </button>
+                            </div>
+                        </nav>
+                        <!-- Details -->
+                        <div class="details" style="height: 98%;">
+                            <div style="width: 99.5%">
+                                <!-- Profile -->
+                                <div class="profile bg-white def-color">
+                                    <div class="w-33">
+                                        <div class="eqdiv">
+                                            <div class="alignr"></div>
+                                            <div class="alignl" style="flex-direction: column;">
+                                                <div class="avatar-container">
+                                                    <img id="avatar" src="./src/images/avatar_none.png">
+                                                    <input type="file" name="avatar-img-input" hidden
+                                                        id="upload-avatar">
+                                                    <label class="avatar-img-upload d-none cursor-pointer"
+                                                        for="upload-avatar"><i class="fa-solid fa-upload"></i>
+                                                    </label>
+                                                    <label class="avatar-img-remove d-none cursor-pointer def-color"><i
+                                                            class="fa-solid fa-xmark"></i>
+                                                    </label>
+                                                </div>
+                                                <span class="patient-id" name="chart-no">
+                                                    CHART#
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="eqdiv">
+                                                <div class="alignr">
+                                                    Prefix:
+                                                </div>
+                                                <div class="alignl">
+                                                    <input type="text" name="prefix">
+                                                </div>
+                                            </div>
+                                            <div class="eqdiv">
+                                                <div class="alignr">
+                                                    First Name<span class="color-required">*</span>:
+                                                </div>
+                                                <div class="alignl">
+                                                    <input class="required-field" type="text" name="fname">
+                                                    <span class="required-label color-required d-none">Please fill first name!</span>
+                                                </div>
+                                            </div>
+                                            <div class="eqdiv">
+                                                <div class="alignr">
+                                                    Middle Name:
+                                                </div>
+                                                <div class="alignl">
+                                                    <input type="text" name="mname">
+                                                </div>
+                                            </div>
+                                            <div class="eqdiv">
+                                                <div class="alignr">
+                                                    Last Name<span class="color-required">*</span>:
+                                                </div>
+                                                <div class="alignl flex" style="flex-direction: column;">
+                                                    <input class="required-field" type="text" name="lname">
+                                                    <span class="required-label color-required d-none">
+                                                        Please fill last
+                                                        name!
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="eqdiv">
+                                                <div class="alignr">
+                                                    Last Name 2:
+                                                </div>
+                                                <div class="alignl">
+                                                    <input type="text" name="lname2">
+                                                </div>
+                                            </div>
+                                            <div class="eqdiv">
+                                                <div class="alignr">
+                                                    Suffix:
+                                                </div>
+                                                <div class="alignl">
+                                                    <input type="text" name="suffix">
+                                                </div>
+                                            </div>
+                                            <div class="eqdiv">
+                                                <div class="alignr">
+                                                    AKA:
+                                                </div>
+                                                <div class="alignl">
+                                                    <input type="text" name="aka">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="w-33">
+                                        <div class="eqdiv">
+                                            <div class="alignr">
+                                                Sex<span class="color-required">*</span>:
+                                            </div>
+                                            <div class="alignl flex" style="flex-direction: column;">
+                                                <select name="sex" class="required-field">
+                                                    <option value="1">Male</option>
+                                                    <option value="2">Female</option>
+                                                    <option value="3">Unknown</option>
+                                                </select>
+                                                <span class="required-label color-required d-none">
+                                                    Please select
+                                                    gender!
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="eqdiv">
+                                            <div class="alignr">
+                                                DOB:
+                                            </div>
+                                            <div class="alignl flex">
+                                                <!-- <div class="w-100"> -->
+                                                <input type="date" name="dob" required>
+                                                <input type="text" name="age" readonly
+                                                    style="border: none; outline: none" value="">
+                                                <!-- </div> -->
+                                            </div>
+                                        </div>
+
+                                        <div class="eqdiv">
+                                            <div class="alignr">
+                                                Pref Language:
+                                            </div>
+                                            <div class="alignl">
+                                                <select name="prefLang">
+                                                    <option value="English">English</option>
+                                                    <option value="Hindi">Hindi</option>
+                                                    <option value="Gujarati">Gujarati</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="eqdiv">
+                                            <div class="alignr">
+                                                Interpreter:
+                                            </div>
+                                            <div class="alignl">
+                                                <input type="checkbox" name="interpreter">
+                                            </div>
+                                        </div>
+                                        <div class="eqdiv">
+                                            <div class="alignr">
+                                                Status:
+                                            </div>
+                                            <div class="alignl">
+                                                <select name="appointmentStatus">
+                                                    <option value="First Appointment Pending">
+                                                        First Appointment Pending
+                                                    </option>
+                                                    <option value="Registration Entry Pending">
+                                                        Registration Entry
+                                                        Pending
+                                                    </option>
+                                                    <option value="Immunizations Pending">Immunizations Pending</option>
+                                                    <option value="Insurance inclusion Pending">
+                                                        Insurance inclusion
+                                                        Pending
+                                                    </option>
+                                                    <option value="Insurace12">Insurace12</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="eqdiv">
+                                            <div class="alignr">
+                                                Risk:
+                                            </div>
+                                            <div class="alignl">
+                                                <input type="text" name="risk"
+                                                    style="width: 50%; height: 60%; color: #ff69b4; background-color: rgba(255,105,180,.3); text-align: center;"
+                                                    value="High" disabled>
+                                                <i class="fa-solid fa-pencil cursor-pointer"></i>
+                                            </div>
+                                        </div>
+                                        <div class="eqdiv">
+                                            <div class="alignr">
+                                                Marital Status:
+                                            </div>
+                                            <div class="alignl">
+                                                <select name="maritalStatus">
+                                                    <option value="Married">Married</option>
+                                                    <option value="Never Married">Never Married</option>
+                                                    <option value="Divorced">Divorced</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="eqdiv">
+                                            <div class="alignr">
+                                                SSN:
+                                            </div>
+                                            <div class="alignl">
+                                                <input type="text" name="ssn">
+                                            </div>
+                                        </div>
+                                        <div class="eqdiv">
+                                            <div class="alignr">
+                                                Race:
+                                            </div>
+                                            <div class="alignl">
+                                                <select name="race">
+                                                    <option value="White">White</option>
+                                                    <option value="Asian">Asian</option>
+                                                    <option value="Black">Black</option>
+                                                    <option value="Other">Other</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="eqdiv">
+                                            <div class="alignr">
+                                                Ethnicity:
+                                            </div>
+                                            <div class="alignl">
+                                                <select name="ethnicity">
+                                                    <option value="Other Ethnicity">Other Ethnicity</option>
+                                                    <option value="Unreported/Refuced to report">
+                                                        Unreported/Refuced to
+                                                        report
+                                                    </option>
+                                                    <option value="Hispanic/Latino">Hispanic/Latino</option>
+                                                    <option value="Non-Hispanic/Latino">Non-Hispanic/Latino</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="w-33">
+                                        <div class="eqdiv">
+                                            <div class="alignr">
+                                                Self Pay:
+                                            </div>
+                                            <div class="alignl">
+                                                <input type="checkbox" name="selfPay">
+                                            </div>
+                                        </div>
+                                        <div class="eqdiv">
+                                            <div class="alignr">
+                                                Default Facility:
+                                            </div>
+                                            <div class="alignl">
+                                                <select name="defaultFacility">
+                                                    <option value="1">(FAC8) Aviral</option>
+                                                    <option value="2">(FAC18) DBZ- Corporation</option>
+                                                    <option value="3">(FAC13) Facility</option>
+                                                    <option value="4">(FAC14) Facility</option>
+                                                    <option value="5">(FAC17) yhello</option>
+                                                    <option value="6">(FACFRE) CMC Fresno</option>
+                                                    <option value="7">(FAC9) Harshit</option>
+                                                    <option value="8">(FAC15) Shinchan nohara</option>
+                                                    <option value="9">(FAC1) MCG - Meditab Clinic Group</option>
+                                                    <option value="10">(FAC4) MCG Angrave</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="eqdiv">
+                                            <div class="alignr">
+                                                Default Provider:
+                                            </div>
+                                            <div class="alignl">
+                                                <select name="defaultProvider">
+                                                    <option value="1">Test, Aviral</option>
+                                                    <option value="2">Test2, Harshit</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="eqdiv">
+                                            <div class="alignr">
+                                                Timezone:
+                                            </div>
+                                            <div class="alignl">
+                                                <select name="timezone">
+                                                    <option value="1">(UTC+05:30) IST - Asia/Kolkata</option>
+                                                    <option value="2">(UTC-10:00) HAST - America/Adak</option>
+                                                    <option value="3">(UTC-06:00) CST - America/Chicago</option>
+                                                    <option value="4">(UTC-05:00) EST - America/Indiana/Indianapolis
+                                                    </option>
+                                                    <option value="5">(UTC-05:00) EST - America/Indiana/Marengo</option>
+                                                    <option value="6">(UTC-09:00) AKST - America/Juneau</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="eqdiv">
+                                            <div class="alignr">
+                                                Default Pharmacy:
+                                            </div>
+                                            <div class="alignl">
+                                                <select name="defaultPharmacy">
+                                                    <option value="1">#003 Eastway NY Test UAT</option>
+                                                    <option value="2">#004 Fairport NY Test UAT</option>
+                                                    <option value="3">Kaiser Perm CA Sacramento Point Wst</option>
+                                                    <option value="4">Medi-Blue Rapid Clinic</option>
+                                                    <option value="5">Shollenberger Pharmacy</option>
+                                                </select>&nbsp&nbsp<i
+                                                    class="fa-sharp fa-solid fa-list-ul cursor-pointer"
+                                                    style="color: #5a5fe2;"></i>&nbsp&nbsp&nbsp
+                                            </div>
+                                        </div>
+                                        <div class="eqdiv">
+                                            <div class="alignr">
+                                                Use current pharmacy for all Rx:
+                                            </div>
+                                            <div class="alignl">
+                                                <input type="checkbox" name="useCurrentPharmacy">
+                                            </div>
+                                        </div>
+                                        <div class="eqdiv">
+                                            <div class="alignr">
+                                                PCP same as Provider:
+                                            </div>
+                                            <div class="alignl">
+                                                <input type="checkbox" name="samePCP">
+                                            </div>
+                                        </div>
+                                        <div class="eqdiv">
+                                            <div class="alignr">
+                                                PCP:
+                                            </div>
+                                            <div class="alignl">
+                                                <select name="pcp">
+                                                    <option value="">Agrawal, Sumit</option>
+                                                    <option value="">BARRIENTOS, JESSICA</option>
+                                                    <option value="">Bandel, Parth</option>
+                                                    <option value="">Bhat, Hrithik</option>
+                                                    <option value="">Brown, Lawrence</option>
+                                                    <option value="">Butler, Jimmy</option>
+                                                    <option value="">Chanpara, Pranav</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="eqdiv">
+                                            <div class="alignr">
+                                                Fee Schedule:
+                                            </div>
+                                            <div class="alignl">
+                                                <select name="feeSchedule" disabled>
+                                                    <option value="1">Fee Structure A</option>
+                                                    <option value="2">Fee Structure B</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Contact Detail -->
+                                <div class="contactdetail bg-white def-color">
+                                    <div class="def-color text-bolder font-larger">
+                                        Contact Details <i class="fa-solid fa-circle-plus"
+                                            onclick="addContactField()"></i>
+                                    </div>
+                                    <div>
+                                        Please set the preferences after adding the contact information, the section to
+                                        set
+                                        preference can be found below the contact section of the page.
+                                        <div class="flex multi-contact">
+                                            <div id="single-contact-1" class="single-contact w-100">
+                                                <fieldset>
+                                                    <legend>
+                                                        <select class="contact-type" name="contact-type">
+                                                            <option value="Home">Home</option>
+                                                            <option value="Work">Work</option>
+                                                            <option value="Other">Other</option>
+                                                        </select>
+                                                    </legend>
+                                                    <div class="address">
+                                                        <div class="flex">
+                                                            <div class="text-bolder" style="width: 98%;">
+                                                                Address <i
+                                                                    class="fa-solid fa-circle-plus addAddressFieldBtn"
+                                                                    onclick="addAddressField(this)"
+                                                                    style="display: none;"></i>
+                                                            </div>
+                                                            <div style="width: 2%;">
+                                                                <i class="fa-solid fa-trash-can"
+                                                                    onclick="removeContactField(this)"></i>
+                                                            </div>
+                                                        </div>
+                                                        <div class="address-section">
+                                                            <div class="single-address">
+                                                                <div>
+                                                                    Street
+                                                                    <div class="flex" style="margin-right: 50%;">
+                                                                        <input type="text" name="street">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="flex" style="column-gap: 2%;">
+                                                                    <div style="width: 24%;">
+                                                                        Zip
+                                                                        <input type="text" name="zip">
+                                                                    </div>
+                                                                    <div style="width: 24%;">
+                                                                        City
+                                                                        <input type="text" name="city">
+                                                                    </div>
+                                                                    <div style="width: 24%;">
+                                                                        State
+                                                                        <input type="text" name="state">
+                                                                    </div>
+                                                                    <div style="width: 24%;">
+                                                                        Country
+                                                                        <select name="country">
+                                                                            <option value="IN">IN</option>
+                                                                            <option value="US">US</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div style="width: 4%;">
+                                                                        <i class="fa-solid fa-trash-can"
+                                                                            onclick="removeAddressField(this)"></i>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <div class="phone-main-section">
+                                                            <div class="text-bolder">
+                                                                Phone <i class="fa-solid fa-circle-plus"
+                                                                    onclick="addPhoneField(this)"></i>
+                                                            </div>
+                                                            <div class="phone-section">
+                                                                <div class="phone-label-section flex"
+                                                                    style="column-gap: 2%; margin-bottom: 0.5rem; border-bottom: solid 1px rgba(212,215,220,.5098039215686274);">
+                                                                    <div style="width: 20%;">
+                                                                        Type
+                                                                    </div>
+                                                                    <div style="width: 20%;">
+                                                                        Code
+                                                                    </div>
+                                                                    <div style="width: 20%;">
+                                                                        Number
+                                                                    </div>
+                                                                    <div style="width: 20%;">
+                                                                        Ext.
+                                                                    </div>
+                                                                </div>
+                                                                <div class="phone-input-section flex"
+                                                                    style="column-gap: 2%;">
+                                                                    <div style="width: 20%;">
+                                                                        <select name="phonetype">
+                                                                            <option value="Cell">Cell</option>
+                                                                            <option value="Landline">Landline</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div style="width: 20%;">
+                                                                        <select name="countrtycode">
+                                                                            <option value="+91">+91 India</option>
+                                                                            <option value="+1">+1 United States</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div style="width: 20%;">
+                                                                        <input type="text" name="phoneNumber"
+                                                                            placeholder="Number" value="1">
+                                                                    </div>
+                                                                    <div style="width: 20%;">
+                                                                        <input type="text" name="Ext" placeholder="Ext."
+                                                                            value="" style="display: none;">
+                                                                    </div>
+                                                                    <i class="fa-solid fa-trash-can"
+                                                                        onclick="removePhoneField(this)"></i>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="fax-main-section">
+                                                            <div class="text-bolder">
+                                                                Fax <i class="fa-solid fa-circle-plus"
+                                                                    onclick="addFaxField(this)"></i>
+                                                            </div>
+                                                            <div class="fax-section">
+                                                                <div class="fax-label-section flex"
+                                                                    style="column-gap: 2%; margin-bottom: 0.5rem; border-bottom: solid 1px rgba(212,215,220,.5098039215686274);">
+                                                                    <div style="width: 20%;">
+                                                                        Code
+                                                                    </div>
+                                                                    <div style="width: 20%;">
+                                                                        Number
+                                                                    </div>
+                                                                </div>
+                                                                <div class="fax-input-section flex"
+                                                                    style="column-gap: 2%;">
+                                                                    <div style="width: 20%;">
+                                                                        <input type="text" placeholder="Code"
+                                                                            name="faxcode">
+                                                                    </div>
+                                                                    <div style="width: 20%;">
+                                                                        <input type="text" placeholder="Number"
+                                                                            name="faxnumber">
+                                                                    </div>
+                                                                    <div style="width: 2%;">
+                                                                        <i class="fa-solid fa-trash-can"
+                                                                            onclick="removeFaxField(this)"></i>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="email-section">
+                                                            <div class="text-bolder">
+                                                                Email <i class="fa-solid fa-circle-plus"
+                                                                    onclick="addEmailField(this)"></i>
+                                                            </div>
+                                                            <div class="multi-email">
+                                                                <div class="single-email flex" style="column-gap: 2%;">
+                                                                    <div style="width: 50%;">
+                                                                        <input type="email" name="email">
+                                                                    </div>
+                                                                    <div style="width: 2%;">
+                                                                        <i class="fa-solid fa-trash-can"
+                                                                            onclick="removeEmailField(this)"></i>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="website-section">
+                                                            <div class="text-bolder">
+                                                                Website <i class="fa-solid fa-circle-plus"
+                                                                    onclick="addWebsiteField(this)"></i>
+                                                            </div>
+                                                            <div class="multi-website">
+                                                                <div class="single-website flex"
+                                                                    style="column-gap: 2%;">
+                                                                    <div style="width: 50%;">
+                                                                        <input class="website-input" type="url"
+                                                                            name="website" onchange="isValidUrl(this)">
+                                                                    </div>
+                                                                    <div class="flex" style="width: 2%; gap: 20%;">
+                                                                        <i target="_blank"
+                                                                            class="fa-solid fa-earth-americas"
+                                                                            style="display: none;"
+                                                                            onclick="openURL(this);"></i>
+                                                                        <i class="fa-solid fa-trash-can"
+                                                                            onclick="removeWebsiteField(this)"></i>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </fieldset>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Contact Preference -->
+                                <div class="contactpref bg-white def-color">
+                                    <div class="def-color text-bolder font-larger">
+                                        Contact Preference
+                                    </div>
+                                    <div class="w-100">
+                                        <table class="w-100">
+                                            <tr>
+                                                <th>
+                                                    Type
+                                                </th>
+                                                <th>
+                                                    Address
+                                                </th>
+                                                <th>
+                                                    Phone <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+                                                </th>
+                                                <th>
+                                                    Fax
+                                                </th>
+                                                <th>
+                                                    Email <i class="fa-sharp fa-solid fa-circle-exclamation"></i>
+                                                </th>
+                                                <th>
+                                                    Website
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    Appointment Reminder
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="">
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="">
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="">
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="">
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    Mailing
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="">
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="">
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="">
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="">
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    Primary
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="">
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="">
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="">
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="">
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    Statement
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="">
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="">
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="">
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="">
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-bolder">
+                                                    Preffered Comm.
+                                                </td>
+                                                <td colspan="5">
+                                                    <div class="flex" style="justify-content: end;">
+                                                        <div class="w-50 flex">
+                                                            <div class="w-100 flex h-33" style="margin-top: 1%;">
+                                                                <div class="w-50" style="text-align: right;">
+                                                                    Type:
+                                                                </div>
+                                                                <div class="w-50">
+                                                                    <select name="pref-comm-type">
+                                                                        <option value="">Email</option>
+                                                                        <option value="">Fax</option>
+                                                                        <option value="">Mail</option>
+                                                                        <option value="">Phone</option>
+                                                                        <option value="">Text</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="w-50" flex>
+                                                            <div class="w-100 flex h-33" style="margin-top: 1%;">
+                                                                <div class="w-50" style="text-align: right;">
+                                                                    value<span class="color-required">*</span>:
+                                                                </div>
+                                                                <div class="w-50">
+                                                                    <select name="prefCommValue"
+                                                                        class="flex required-field">
+                                                                        <option value="1"></option>
+                                                                    </select>
+                                                                    <span class="required-label color-required d-none">
+                                                                        Please
+                                                                        fill preffered Comm!
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                                <!-- Other Details -->
+                                <div class="otherdetails bg-white def-color">
+                                    <div class="def-color text-bolder font-larger">
+                                        <i class="fa-solid fa-circle-chevron-right cursor-pointer" id="openOtherDetails"
+                                            onclick="openOtherDetails()"></i>
+                                        <i class="fa-solid fa-circle-chevron-down cursor-pointer" id="closeOtherDetails"
+                                            onclick="closeOtherDetails()" style="display: none;"></i> Other Details
+                                    </div>
+                                    <div class="flex other-detail-content" style="display: none; transition: 5s;">
+                                        <div class="w-33">
+                                            <div class="flex eqdiv">
+                                                <div class="alignr">
+                                                    <label for="employment">Employment:</label>
+                                                </div>
+                                                <div class="alignl">
+                                                    <select name="employment">
+                                                        <option value="Full time Employed">Full time Employed</option>
+                                                        <option value="Part time Employed">Part time Employed</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="flex eqdiv">
+                                                <div class="alignr">
+                                                    <label for="firstCalledDate">First Called Date: </label>
+                                                </div>
+                                                <div class="alignl">
+                                                    <input type="date" name="firstCalledDate">
+                                                </div>
+                                            </div>
+                                            <div class="flex eqdiv">
+                                                <div class="alignr">
+                                                    <label for="deceasedTime">Deceased Time:</label>
+                                                </div>
+                                                <div class="alignl">
+                                                    <input type="date" name="deceasedTime" disabled>
+                                                </div>
+                                            </div>
+                                            <div class="flex eqdiv">
+                                                <div class="alignr">
+                                                    <label for="motherLastName">Mother's Last Name:</label>
+                                                </div>
+                                                <div class="alignl">
+                                                    <input type="text" name="motherLastName">
+                                                </div>
+                                            </div>
+                                            <div class="flex eqdiv">
+                                                <div class="alignr">
+                                                    <label for="birthPlace">Birth Place:</label>
+                                                </div>
+                                                <div class="alignl">
+                                                    <input type="text" name="birthPlace">
+                                                </div>
+                                            </div>
+                                            <div class="flex eqdiv">
+                                                <div class="alignr">
+                                                    <label for="citizenship">Citizenship:</label>
+                                                </div>
+                                                <div class="alignl">
+                                                    <select name="citizenship">
+                                                        <option value="Indian">Indian</option>
+                                                        <option value="American">American</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="flex eqdiv">
+                                                <div class="alignr">
+                                                    <label for="note">Note:</label>
+                                                </div>
+                                                <div class="alignl">
+                                                    <textarea style="border: 1px solid #e9eafb; width: 100%;"
+                                                        name="note" rows="3"></textarea>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="w-33">
+                                            <div class="flex eqdiv">
+                                                <div class="alignr">
+                                                    <label for="genderIdentity">Gender Identity:</label>
+                                                </div>
+                                                <div class="alignl">
+                                                    <select name="genderIdentity">
+                                                        <option value="Male">Male</option>
+                                                        <option value="Female">Female</option>
+                                                        <option value="Transgender">Transgender</option>
+                                                        <option value="Other">Other</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="flex eqdiv">
+                                                <div class="alignr">
+                                                    <label for="referaralSrc">Referral Source:</label>
+                                                </div>
+                                                <div class="alignl">
+                                                    <select name="referaralSrc">
+                                                        <option value="A Hospital">A Hospital</option>
+                                                        <option value="B Hospital">B Hospital</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="flex eqdiv">
+                                                <div class="alignr">
+                                                    <label for="maiden">Mother's Maiden:</label>
+                                                </div>
+                                                <div class="alignl">
+                                                    <input type="text" name="maiden">
+                                                </div>
+                                            </div>
+                                            <div class="flex eqdiv">
+                                                <div class="alignr">
+                                                    <label for="motherIdentifier">Mother Identifier:</label>
+                                                </div>
+                                                <div class="alignl">
+                                                    <input type="text" name="motherIdentifier">
+                                                </div>
+                                            </div>
+                                            <div class="flex eqdiv">
+                                                <div class="alignr">
+                                                    <label for="multipleBirth">Multiple Birth:</label>
+                                                </div>
+                                                <div class="alignl">
+                                                    <input type="checkbox" name="multipleBirth">
+                                                    <input type="number" name="birthCount" disabled>
+                                                </div>
+                                            </div>
+                                            <div class="flex eqdiv">
+                                                <div class="alignr">
+                                                    <label for="religion">Religion:</label>
+                                                </div>
+                                                <div class="alignl">
+                                                    <select name="religion">
+                                                        <option value="Hindu">Hindu</option>
+                                                        <option value="Christian">Christian</option>
+                                                        <option value="Muslim">Muslim</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="w-33">
+                                            <div class="flex eqdiv">
+                                                <div class="alignr">
+                                                    <label for="sexualOrientation">Sexual Orientation:</label>
+                                                </div>
+                                                <div class="alignl">
+                                                    <select name="sexualOrientation">
+                                                        <option value="Bisexual">Bisexual</option>
+                                                        <option value="Heterosexual">Heterosexual</option>
+                                                        <option value="Homosexual">Homosexual</option>
+                                                        <option value="Unknown">Unknown</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="flex eqdiv">
+                                                <div class="alignr">
+                                                    <label for="deceased">Deceased:</label>
+                                                </div>
+                                                <div class="alignl">
+                                                    <input type="checkbox" name="deceased">
+                                                    <input type="date" name="deceasedDate" disabled>
+                                                </div>
+                                            </div>
+                                            <div class="flex eqdiv">
+                                                <div class="alignr">
+                                                    <label for="motherMiddleName">Mother's Middle Name:</label>
+                                                </div>
+                                                <div class="alignl">
+                                                    <input type="text" name="motherMiddleName">
+                                                </div>
+                                            </div>
+                                            <div class="flex eqdiv">
+                                                <div class="alignr">
+                                                    <label for="veteranMilitaryStatus">Veteran Military Status:</label>
+                                                </div>
+                                                <div class="alignl">
+                                                    <select name="veteranMilitaryStatus">
+                                                        <option value="1">Option 1</option>
+                                                        <option value="2">Option 2</option>
+                                                        <option value="3">Option 3</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="flex eqdiv">
+                                                <div class="alignr">
+                                                    <label for="nationality">Nationality:</label>
+                                                </div>
+                                                <div class="alignl">
+                                                    <select name="nationality">
+                                                        <option value="Indian">Indian</option>
+                                                        <option value="American">American</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="flex eqdiv">
+                                                <div class="alignr">
+                                                    <label for="driverLicense">Driver's License:</label>
+                                                </div>
+                                                <div class="alignl">
+                                                    <input type="text" name="driverLicense">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right -->
+        <div class="right bg-white">
+            <a href="#">
+                <i class="fa-solid fa-fax"></i>
+                <div>4</div>
+            </a>
+            <a href="#">
+                <i class="fa-solid fa-comment-dots"></i>
+                <div>0</div>
+            </a>
+            <a href="#">
+                <i class="fa-solid fa-envelope"></i>
+                <div>4</div>
+            </a>
+            <a href="#">
+                <i class="fa-solid fa-bell"></i>
+                <div>0</div>
+            </a>
+            <a href="#">
+                <i class="fa-solid fa-list-check"></i>
+                <div>0</div>
+            </a>
+            <a href="#"><i class="fa-solid fa-calendar-plus"></i></a>
+            <a href="#"><i class="fa-solid fa-note-sticky"></i></a>
+        </div>
+    </div>
+    <script src="./src/js/main.js"></script>
+</body>
+
+
+</html>
