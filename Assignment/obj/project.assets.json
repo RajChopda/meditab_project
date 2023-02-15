@@ -609,11 +609,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\raj_p\\source\\repos\\meditab_project\\Assignment\\PatientDemographicsAPI.csproj",
+      "projectUniqueName": "C:\\Users\\raj_p\\source\\repos\\Assignment\\Assignment\\PatientDemographicsAPI.csproj",
       "projectName": "PatientDemographicsAPI",
-      "projectPath": "C:\\Users\\raj_p\\source\\repos\\meditab_project\\Assignment\\PatientDemographicsAPI.csproj",
+      "projectPath": "C:\\Users\\raj_p\\source\\repos\\Assignment\\Assignment\\PatientDemographicsAPI.csproj",
       "packagesPath": "C:\\Users\\raj_p\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\raj_p\\source\\repos\\meditab_project\\Assignment\\obj\\",
+      "outputPath": "C:\\Users\\raj_p\\source\\repos\\Assignment\\Assignment\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\raj_p\\AppData\\Roaming\\NuGet\\NuGet.Config",

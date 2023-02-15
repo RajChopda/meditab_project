@@ -1,5 +1,5 @@
-using Assignment.DataAccessLayer;
-using Assignment.ServicesLayer;
+using PatientDemographicsAPI.DataAccessLayer;
+using PatientDemographicsAPI.ServicesLayer;
 
 var builder = WebApplication.CreateBuilder(args);
 

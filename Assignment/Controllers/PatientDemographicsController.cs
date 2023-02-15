@@ -1,10 +1,9 @@
-﻿using Assignment.Models;
-using Assignment.ServicesLayer;
+﻿using PatientDemographicsAPI.Models;
+using PatientDemographicsAPI.ServicesLayer;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using System.Net;
+using Microsoft.AspNetCore.JsonPatch;
 
-namespace Assignment.Controllers
+namespace PatientDemographicsAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -18,14 +17,7 @@ namespace Assignment.Controllers
             _patientDemographicsSL = patientDemographicsSL;
             //_httpClient= new HttpClient();
         }
-/*
-        [HttpGet("testing")]
-        public async Task<Stream> Index()
-        {
-            var response = await _httpClient.GetAsync("https://localhost:7139/api/patientdemographics/1");
-            return await response.Content.ReadAsStreamAsync();
-        }
-*/
+
         /// <summary>
         /// Get patient by id
         /// </summary>
@@ -42,21 +34,21 @@ namespace Assignment.Controllers
         /// </summary>
         /// <param name="req"></param>
         /// <returns></returns>
-        [HttpPost("getAllPatientData")]
-        public async Task<PatientDemographicsList> GetPatientsData(RequestPatientData req)
+        [HttpPost("GetPatientList")]
+        public async Task<PatientDemographicsList> GetPatientList(RequestPatientData req)
         {
-            return await _patientDemographicsSL.GetPatientsData(req);
+            return await _patientDemographicsSL.GetPatientList(req);
         }
 
         /// <summary>
         /// Add patient data
         /// </summary>
-        /// <param name="pd"></param>
+        /// <param name="createPatient"></param>
         /// <returns>id of new added patient</returns>
         [HttpPost]
-        public async Task<int> CreatePatient(PatientDemographics pd)
+        public async Task<int> CreatePatient(CreateUpdatePatient createPatient)
         {
-            return await _patientDemographicsSL.CreatePatient(pd);
+            return await _patientDemographicsSL.CreatePatient(createPatient);
         }
 
         /// <summary>
@@ -66,7 +58,7 @@ namespace Assignment.Controllers
         /// <param name="pd"></param>
         /// <returns>id of updated patient</returns>
         [HttpPut("{id}")]
-        public async Task<int> UpdatePatient(int id, PatientDemographics pd)
+        public async Task<int> UpdatePatient(int id, CreateUpdatePatient pd)
         {
             return await _patientDemographicsSL.UpdatePatient(id, pd);
         }
@@ -80,6 +72,30 @@ namespace Assignment.Controllers
         public async Task<string> DeletePatient(int id)
         {
             return await _patientDemographicsSL.DeletePatient(id);
+        }
+
+        [HttpPatch("{id}")]
+        public async Task<int> PatchPatient(int id, JsonPatchDocument patientDoc)
+        {
+            return await _patientDemographicsSL.PatchPatient(id, patientDoc);
+            /*
+            [
+              {
+                "path": "middleName",
+                "op": "replace",
+                "value": "G"
+              },
+              {
+                "path": "allergyChangeLog/updated/-",
+                "op": "replace",
+                "value": {
+                           "allergyId": 17,
+                           "allergyMasterId": 3,
+                            "note": "New Note"
+                         }
+              }
+            ]
+            */
         }
     }
 }

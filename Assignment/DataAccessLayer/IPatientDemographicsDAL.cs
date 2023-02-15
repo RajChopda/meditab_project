@@ -1,13 +1,15 @@
-﻿using Assignment.Models;
+﻿using Microsoft.AspNetCore.JsonPatch;
+using PatientDemographicsAPI.Models;
 
-namespace Assignment.DataAccessLayer
+namespace PatientDemographicsAPI.DataAccessLayer
 {
     public interface IPatientDemographicsDAL
     {
         public Task<dynamic> GetPatientDataById(int id);
-        public Task<PatientDemographicsList> GetPatientsData(RequestPatientData req);
-        public Task<int> CreatePatient(PatientDemographics pd);
-        public Task<int> UpdatePatient(int id, PatientDemographics pd);
+        public Task<PatientDemographicsList> GetPatientList(RequestPatientData req);
+        public Task<int> CreatePatient(CreateUpdatePatient createPatient);
+        public Task<int> UpdatePatient(int id, CreateUpdatePatient pd);
         public Task<string> DeletePatient(int id);
+        public Task<int> PatchPatient(int id, JsonPatchDocument patientDoc);
     }
 }

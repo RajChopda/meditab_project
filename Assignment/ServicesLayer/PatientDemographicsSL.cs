@@ -1,38 +1,43 @@
-﻿using Assignment.DataAccessLayer;
-using Assignment.Models;
+﻿using Microsoft.AspNetCore.JsonPatch;
+using PatientDemographicsAPI.DataAccessLayer;
+using PatientDemographicsAPI.Models;
 
-namespace Assignment.ServicesLayer
+namespace PatientDemographicsAPI.ServicesLayer
 {
     public class PatientDemographicsSL:IPatientDemographicsSL
     {
-        public readonly IPatientDemographicsDAL _assignmentDAL;
-        public PatientDemographicsSL(IPatientDemographicsDAL assignmentDAL)
+        public readonly IPatientDemographicsDAL _patientDemographicsDAL;
+        public PatientDemographicsSL(IPatientDemographicsDAL patientDemographicsDAL)
         {
-            _assignmentDAL = assignmentDAL;
+            _patientDemographicsDAL = patientDemographicsDAL;
         }
 
         public async Task<dynamic> GetPatientDataById(int id)
         {
-            return await _assignmentDAL.GetPatientDataById(id);
+            return await _patientDemographicsDAL.GetPatientDataById(id);
         }
 
-        public async Task<PatientDemographicsList> GetPatientsData(RequestPatientData req)
+        public async Task<PatientDemographicsList> GetPatientList(RequestPatientData req)
         {
-            return await _assignmentDAL.GetPatientsData(req);
+            return await _patientDemographicsDAL.GetPatientList(req);
         }
 
-        public async Task<int> CreatePatient(PatientDemographics pd)
+        public async Task<int> CreatePatient(CreateUpdatePatient createPatient)
         {
-            return await _assignmentDAL.CreatePatient(pd);
+            return await _patientDemographicsDAL.CreatePatient(createPatient);
         }
 
-        public async Task<int> UpdatePatient(int id, PatientDemographics pd)
+        public async Task<int> UpdatePatient(int id, CreateUpdatePatient pd)
         {
-            return await _assignmentDAL.UpdatePatient(id, pd);
+            return await _patientDemographicsDAL.UpdatePatient(id, pd);
         }
         public async Task<string> DeletePatient(int id)
         {
-            return await _assignmentDAL.DeletePatient(id);
+            return await _patientDemographicsDAL.DeletePatient(id);
+        }
+        public async Task<int> PatchPatient(int id, JsonPatchDocument patientDoc)
+        {
+            return await _patientDemographicsDAL.PatchPatient(id, patientDoc);
         }
     }
 }
