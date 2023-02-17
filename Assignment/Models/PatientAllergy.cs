@@ -1,24 +1,13 @@
 ﻿namespace PatientDemographicsAPI.Models
 {
-    public interface PatientAllergyId
+    public class DeletePatientAllergy
     {
         public int AllergyId { get; set; }
     }
-
-    public class CreatePatientAllergy
+    public class PatientAllergy : DeletePatientAllergy
     {
         public int AllergyMasterId { get; set; }
         public string? Note { get; set; } = null;
-    }
-
-    public class PatientAllergy : CreatePatientAllergy, PatientAllergyId
-    {
-        public int AllergyId { get; set; }
-    }
-
-    public class DeletePatientAllergy : PatientAllergyId
-    {
-        public int AllergyId { get; set; }
     }
 
     public class PatientAllergyList
@@ -28,7 +17,7 @@
 
     public class AllergyChangeLog
     {
-        public List<CreatePatientAllergy> Created { get; set; } = new();
+        public List<PatientAllergy> Created { get; set; } = new();
         public List<PatientAllergy> Updated { get; set; } = new();
         public List<DeletePatientAllergy> Deleted { get; set; } = new();
     }

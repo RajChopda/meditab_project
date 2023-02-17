@@ -5,6 +5,8 @@
     /// </summary>
     public class PatientDataModel
     {
+        public int? PatientId { get; set; } = null;
+
         public string? FirstName { get; set; } = null;
         public string? MiddleName { get; set; } = null;
         public string? LastName { get; set; } = null;
@@ -48,8 +50,8 @@
         public string? LastName { get; set; } = null;
         public string? Dob { get; set; } = null;
         public int? SexTypeId { get; set; } = null;
-        public int? PageNumber { get; set; } = 1;
-        public int? PageSize { get; set; } = 5;
+        public int? PageNumber { get; set; } = null;
+        public int? PageSize { get; set; } = null;
         public string? OrderBy { get; set; } = null;
         public string? Sorting { get; set; } = null;
         public int? AllergyMasterId { get; set; } = null;
