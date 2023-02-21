@@ -63,8 +63,8 @@ declare
 	dense_rank() over (order by ';
 	query_start2 text := 'pd.patient_id) rowno
 	from patient_demographics pd
-	left join patient_allergy pa on pa.patient_id=pd.patient_id ';
-	where_cond text := 'where (pd.is_deleted=false and (pa.is_deleted=false or pa.is_deleted is null)) ';
+	left join patient_allergy pa on pa.patient_id=pd.patient_id and pa.is_deleted = false ';
+	where_cond text := 'where (pd.is_deleted=false and (pa.patient_allergy_id is null or pa.is_deleted=false)) ';
 	grp_order_query text := ' group by pd.patient_id, pa.patient_allergy_id order by ';
 	pagination_query text := ') select * from patientdata where rowno between ';
 begin
@@ -82,18 +82,19 @@ begin
 end;
 $$ language plpgsql;
 
-select * from patientgetwithallergy();
+select * from getpatientwithallergy(_patient_id=>62);
 
-select * from patientgetwithallergy(_patient_id=>1);
-select * from patientgetwithallergy(_patient_id=>44);
+select * from getpatientwithallergy();
 
-select * from patientgetwithallergy(_pagesize=>100);
+select * from getpatientwithallergy(_patient_id=>1);
 
-select * from patientgetwithallergy(_pagesize=>10, _pagenumber=>3);
+select * from getpatientwithallergy(_pagesize=>100);
 
-select * from patientgetwithallergy(_allergy_master_id=>1);
+select * from getpatientwithallergy(_pagesize=>10, _pagenumber=>3);
 
-select * from patientgetwithallergy( _fname => 'Raj',  _orderby=>'fname');
+select * from getpatientwithallergy(_allergy_master_id=>1);
+
+select * from getpatientwithallergy( _fname => 'Raj',  _orderby=>'fname');
 
 select * from patient_allergy;
 

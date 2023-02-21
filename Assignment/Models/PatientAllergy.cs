@@ -2,7 +2,7 @@
 {
     public class DeletePatientAllergy
     {
-        public int AllergyId { get; set; }
+        public int PatientAllergyId { get; set; }
     }
     public class PatientAllergy : DeletePatientAllergy
     {

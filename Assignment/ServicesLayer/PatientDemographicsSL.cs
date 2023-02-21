@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.Mvc;
 using PatientDemographicsAPI.DataAccessLayer;
 using PatientDemographicsAPI.Models;
 
@@ -17,7 +18,7 @@ namespace PatientDemographicsAPI.ServicesLayer
             return await _patientDemographicsDAL.GetPatientDataById(id);
         }
 
-        public async Task<PatientDemographicsList> GetPatientList(RequestPatientData req)
+        public async Task<List<PatientDemographics>> GetPatientList(RequestPatientData req)
         {
             return await _patientDemographicsDAL.GetPatientList(req);
         }
@@ -38,6 +39,10 @@ namespace PatientDemographicsAPI.ServicesLayer
         public async Task<int> PatchPatient(int id, JsonPatchDocument patientDoc)
         {
             return await _patientDemographicsDAL.PatchPatient(id, patientDoc);
+        }
+        public Task<List<PatientDemographics>> Testing(RequestPatientData req)
+        {
+            return _patientDemographicsDAL.Testing(req);
         }
     }
 }

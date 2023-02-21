@@ -35,7 +35,7 @@ namespace PatientDemographicsAPI.Controllers
         /// <param name="req"></param>
         /// <returns></returns>
         [HttpPost("GetPatientList")]
-        public async Task<PatientDemographicsList> GetPatientList(RequestPatientData req)
+        public async Task<List<PatientDemographics>> GetPatientList(RequestPatientData req)
         {
             return await _patientDemographicsSL.GetPatientList(req);
         }
@@ -45,7 +45,7 @@ namespace PatientDemographicsAPI.Controllers
         /// </summary>
         /// <param name="createPatient"></param>
         /// <returns>id of new added patient</returns>
-        [HttpPost]
+        [HttpPost("CreatePatient")]
         public async Task<int> CreatePatient(CreateUpdatePatient createPatient)
         {
             return await _patientDemographicsSL.CreatePatient(createPatient);
@@ -96,6 +96,12 @@ namespace PatientDemographicsAPI.Controllers
               }
             ]
             */
+        }
+
+        [HttpPost("TestingAPI")]
+        public async Task<List<PatientDemographics>> Testing(RequestPatientData req)
+        {
+            return await _patientDemographicsSL.Testing(req);
         }
     }
 }

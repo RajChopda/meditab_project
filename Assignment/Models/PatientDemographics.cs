@@ -5,8 +5,7 @@
     /// </summary>
     public class PatientDataModel
     {
-        public int? PatientId { get; set; } = null;
-
+        public int PatientId { get; set; }
         public string? FirstName { get; set; } = null;
         public string? MiddleName { get; set; } = null;
         public string? LastName { get; set; } = null;
@@ -29,7 +28,7 @@
     public class PatientDemographics : PatientDataModel
     {
         public string? ChartNo { get; set; } = null;
-        public List<PatientAllergy>? PatientAllergy { get; set; } = null;
+        public List<PatientAllergy> PatientAllergy { get; set; } = new();
     }
 
     /// <summary>
@@ -37,7 +36,7 @@
     /// </summary>
     public class PatientDemographicsList
     {
-        public List<PatientDemographics>? PatientList { get; set; }
+        public List<PatientDemographics> PatientList { get; set; } = new();
     }
 
     /// <summary>

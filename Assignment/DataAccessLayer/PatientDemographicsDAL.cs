@@ -4,6 +4,9 @@ using System.Data;
 using System.Transactions;
 using Microsoft.AspNetCore.JsonPatch;
 using Newtonsoft.Json;
+using Dapper;
+using Microsoft.AspNetCore.Mvc;
+using System.Text.RegularExpressions;
 
 namespace PatientDemographicsAPI.DataAccessLayer
 {
@@ -40,70 +43,35 @@ namespace PatientDemographicsAPI.DataAccessLayer
         /// <returns>patiend data of given id</returns>
         public async Task<dynamic> GetPatientDataById(int id)
         {
-            PatientDemographicsList patientData = new()
-            {
-                PatientList = new List<PatientDemographics>()
-            };
-            string patient_get_query = "select * from testing(_patient_id=>" + id + ")";
+            List<PatientDemographics> patients = new();
+            string patient_get_query = "select * from getpatientwithallergy(_patient_id=>" + id + ")";
             try
             {
                 using (NpgsqlConnection myCon = new(sqlDataSource))
                 {
                     myCon.Open();
-                    using (NpgsqlCommand myCommand = new(patient_get_query, myCon))
-                    {
-                        DataTable table = new();
-                        NpgsqlDataReader myReader;
-                        myReader = myCommand.ExecuteReader();
-                        table.Load(myReader);
-                        myReader.Close();
+                    var patientdata = (await myCon.QueryAsync<PatientDemographics, PatientAllergy, PatientDemographics>(patient_get_query,
+                                                                                                                            (patient, allergy) => {
+                                                                                                                                if (allergy != null)
+                                                                                                                                    patient.PatientAllergy.Add(allergy);
+                                                                                                                                return patient;
+                                                                                                                            }, splitOn: "PatientAllergyId"))
+                                                                                                                        .GroupBy(patient => patient.PatientId);
+                    Console.WriteLine(patientdata.Count());
 
-                        PatientAllergyList patientAllergyList = new()
+                        PatientDemographics patient = patientdata.ElementAt(0).ElementAt(1);
+                        foreach (PatientDemographics patientrecord in patientdata.ElementAt(0).Skip(1))
                         {
-                            AllergyList = new List<PatientAllergy>()
-                        };
-                        Console.WriteLine(table.Rows.Count);
-                        for (int i = 0; i < table.Rows.Count; i++)
-                        {
-                            DataRow dr = table.Rows[i];
-                            if (dr["patient_allergy_id"] != DBNull.Value)
-                            {
-                                patientAllergyList.AllergyList.Add(new PatientAllergy
-                                {
-                                    AllergyId = (int)dr["patient_allergy_id"],
-                                    AllergyMasterId = (int)dr["allergy_master_id"],
-                                    Note = dr["note"] == DBNull.Value ? "!" : dr["note"].ToString()
-                                });
-                            }
-
-                            if (i == table.Rows.Count - 1 || (int)dr["patient_id"] != (int)table.Rows[i + 1]["patient_id"])
-                            {
-                                patientData.PatientList.Add(new PatientDemographics
-                                {
-                                    PatientId = (int)dr["patient_id"],
-                                    FirstName = dr["fname"].ToString(),
-                                    LastName = dr["lname"].ToString(),
-                                    MiddleName = dr["mname"] == DBNull.Value ? null : dr["mname"].ToString(),
-                                    Dob = dr["dob"] == DBNull.Value ? null : Convert.ToDateTime(dr["dob"]).ToString("dd/MM/yyyy"),
-                                    SexTypeId = (int)dr["sex_type_id"],
-                                    ChartNo = dr["chart_no"].ToString(),
-                                    IsActive = Convert.ToBoolean(dr["is_active"]),
-                                    PatientAllergy = patientAllergyList.AllergyList
-                                });
-                                patientAllergyList = new()
-                                {
-                                    AllergyList = new List<PatientAllergy>()
-                                };
-                            }
+                            patient.PatientAllergy.Add(patientrecord.PatientAllergy[0]);
                         }
-                    }
+                        patients.Add(patient);
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex);
             }
-            return await Task.FromResult(patientData);
+            return patients;
         }
 
         /// <summary>
@@ -112,78 +80,51 @@ namespace PatientDemographicsAPI.DataAccessLayer
         /// <param name="req"></param>
         /// <returns></returns>
         ///
-        public Task<PatientDemographicsList> GetPatientList(RequestPatientData req)
+        public async Task<List<PatientDemographics>> GetPatientList(RequestPatientData req)
         {
-            string patient_list_get_query = "select * from testing(_patient_id=>" + CheckNullValue(req.PatientId) + ", _fname=>" + CheckNullValue(req.FirstName) + ", _lname=>" + CheckNullValue(req.LastName) +
-                ", _dob=>" + CheckNullValue(req.Dob) + ", _sex_type_id=>" + CheckNullValue(req.SexTypeId) + ", _pagenumber=>" + CheckNullValue(req.PageNumber) + ", _pagesize=>" + CheckNullValue(req.PageSize) +
-                ", _orderby=>" + CheckNullValue(req.OrderBy) + ", _sorting=>" + CheckNullValue(req.Sorting) + ", _allergy_master_id=>" + CheckNullValue(req.AllergyMasterId) + ")";
-
-            PatientDemographicsList patientData = new()
-            {
-                PatientList = new List<PatientDemographics>()
-            };
-/*            PatientDemographics p = new();
-*/            
-            Console.WriteLine(patientData.PatientList.GroupBy(p=> p.PatientId).ToList().Count);
-
+            string patient_list_get_query = "select * from getpatientwithallergy(" +
+                                            "_patient_id=>" + CheckNullValue(req.PatientId) +
+                                            ", _fname=>" + CheckNullValue(req.FirstName) +
+                                            ", _lname=>" + CheckNullValue(req.LastName) +
+                                            ", _dob=>" + CheckNullValue(req.Dob) +
+                                            ", _sex_type_id=>" + CheckNullValue(req.SexTypeId) +
+                                            ", _pagenumber=>" + CheckNullValue(req.PageNumber) +
+                                            ", _pagesize=>" + CheckNullValue(req.PageSize) +
+                                            ", _orderby=>" + CheckNullValue(req.OrderBy) +
+                                            ", _sorting=>" + CheckNullValue(req.Sorting) +
+                                            ", _allergy_master_id=>" + CheckNullValue(req.AllergyMasterId) +
+                                            ")";
+            List<PatientDemographics> patients = new();
             try
             {
                 using (NpgsqlConnection myCon = new(sqlDataSource))
                 {
                     myCon.Open();
-                    using (NpgsqlCommand myCommand = new(patient_list_get_query, myCon))
+                    var patientdata = (await myCon.QueryAsync<PatientDemographics, PatientAllergy, PatientDemographics>(patient_list_get_query,
+                                                                                                                            (patient, allergy) => {
+                                                                                                                                if (allergy != null)
+                                                                                                                                    patient.PatientAllergy.Add(allergy);
+                                                                                                                                return patient;
+                                                                                                                            }, splitOn: "PatientAllergyId"))
+                                                                                                                        .GroupBy(patient => patient.PatientId);
+
+                    foreach (IGrouping<int, PatientDemographics> patientGroup in patientdata)
                     {
-                        DataTable table = new();
-                        NpgsqlDataReader myReader;
-                        myReader = myCommand.ExecuteReader();
-                        table.Load(myReader);
-                        myReader.Close();
-
-                        PatientAllergyList patientAllergyList = new()
+                        PatientDemographics patient = patientGroup.First();
+                        foreach (PatientDemographics patientrecord in patientGroup.Skip(1))
                         {
-                            AllergyList = new List<PatientAllergy>()
-                        };
-
-                        foreach(DataRow dr in table.Rows)
-                        {
-                            if (dr["patient_allergy_id"] != DBNull.Value)
-                            {
-                                patientAllergyList.AllergyList.Add(new PatientAllergy
-                                {
-                                    AllergyId = (int)dr["patient_allergy_id"],
-                                    AllergyMasterId = (int)dr["allergy_master_id"],
-                                    Note = dr["note"] == DBNull.Value ? "!" : dr["note"].ToString()
-                                });
-                            }
-
-                            if (table.Rows.IndexOf(dr) == table.Rows.Count - 1 || (int)dr["patient_id"] != (int)table.Rows[table.Rows.IndexOf(dr) + 1]["patient_id"])
-                            {
-                                patientData.PatientList.Add(new PatientDemographics
-                                {
-                                    PatientId = (int)dr["patient_id"],
-                                    FirstName = dr["fname"].ToString(),
-                                    LastName = dr["lname"].ToString(),
-                                    MiddleName = dr["mname"] == DBNull.Value ? null : dr["mname"].ToString(),
-                                    Dob = dr["dob"] == DBNull.Value ? null : Convert.ToDateTime(dr["dob"]).ToString("dd/MM/yyyy"),
-                                    SexTypeId = (int)dr["sex_type_id"],
-                                    ChartNo = dr["chart_no"].ToString(),
-                                    IsActive = Convert.ToBoolean(dr["is_active"]),
-                                    PatientAllergy = patientAllergyList.AllergyList
-                                });
-                                patientAllergyList = new()
-                                {
-                                    AllergyList = new List<PatientAllergy>()
-                                };
-                            }
+                            patient.PatientAllergy.Add(patientrecord.PatientAllergy[0]);
                         }
+                        patients.Add(patient);
                     }
+
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex);
             }
-            return Task.FromResult(patientData);
+            return patients;
         }
 
         /// <summary>
@@ -200,9 +141,7 @@ namespace PatientDemographicsAPI.DataAccessLayer
                                         ", _dob=>" + CheckNullValue(createPatient.Dob) +
                                         ", _sex_type_id=>" + CheckNullForNoNullValue(createPatient.SexTypeId) +
                                         ")";
-            Console.WriteLine($"PatientCreate query: {patientCreateQuery}");
             int _id = 0;
-            NpgsqlDataReader myReader;
             using (TransactionScope transactionScope = new())
             {
                 try
@@ -210,34 +149,23 @@ namespace PatientDemographicsAPI.DataAccessLayer
                     using (NpgsqlConnection myCon = new(sqlDataSource))
                     {
                         myCon.Open();
-                        using (NpgsqlCommand myCommand = new(patientCreateQuery, myCon))
+                        _id = myCon.Query<int>(patientCreateQuery).First();
+                        for (int i = 0; i < createPatient.AllergyChangeLog.Created.Count; i++)
                         {
-                            myReader = myCommand.ExecuteReader();
-                            myReader.Read();
-                            _id = (int)myReader[0];
-                            myReader.Close();
+                            string allergyCreateQuery = "select * from createpatientallergy(" +
+                                                        "_patient_id=>" + _id +
+                                                        ", _allergy_master_id=>" + createPatient.AllergyChangeLog.Created[i].AllergyMasterId +
+                                                        ", _note=>" + CheckNullValue(createPatient.AllergyChangeLog.Created[i].Note) + ")";
+                            myCon.Query(allergyCreateQuery);
 
-                            for (int i = 0; i < createPatient.AllergyChangeLog.Created.Count; i++)
-                            {
-                                string allergyCreateQuery = "select * from createpatientallergy(" +
-                                                            "_patient_id=>" + _id +
-                                                            ", _allergy_master_id=>" + createPatient.AllergyChangeLog.Created[i].AllergyMasterId +
-                                                            ", _note=>" + CheckNullValue(createPatient.AllergyChangeLog.Created[i].Note) + ")";
-                                NpgsqlDataReader myReader2;
-                                using (NpgsqlCommand myCommand2 = new(allergyCreateQuery, myCon))
-                                {
-                                    myReader2 = myCommand2.ExecuteReader();
-                                    myReader2.Close();
-                                }
-                            }
-                            transactionScope.Complete();
                         }
                     }
+                        transactionScope.Complete();
                 }
                 catch (Exception ex)
                 {
                     transactionScope.Dispose();
-                    Console.WriteLine(ex.Message);
+                    Console.WriteLine(ex);
                 }
             }
             return Task.FromResult(_id);
@@ -261,7 +189,6 @@ namespace PatientDemographicsAPI.DataAccessLayer
                                         ")";
             int _id = 0;
 
-            NpgsqlDataReader myReader;
             using (TransactionScope transactionScope = new())
             {
                 try
@@ -269,62 +196,43 @@ namespace PatientDemographicsAPI.DataAccessLayer
                     using (NpgsqlConnection myCon = new(sqlDataSource))
                     {
                         myCon.Open();
-                        using (NpgsqlCommand myCommand = new(patientUpdateQuery, myCon))
-                        {
-                            myReader = myCommand.ExecuteReader();
-                            myReader.Read();
-                            _id = (int)myReader[0];
-                            myReader.Close();
+                        _id = myCon.Query<int>(patientUpdateQuery).First();
 
-                            for (int i = 0; i < updatePatient.AllergyChangeLog.Created.Count; i++)
-                            {
-                                string allergyCreateQuery = "select * from createpatientallergy("+
-                                                            "_patient_id=>"+ _id +
-                                                            ", _allergy_master_id=>"+ updatePatient.AllergyChangeLog.Created[i].AllergyMasterId +
-                                                            ", _note=>" + CheckNullValue(updatePatient.AllergyChangeLog.Created[i].Note) +
-                                                            ")";
-                                NpgsqlDataReader myReader2;
-                                using (NpgsqlCommand myCommand2 = new(allergyCreateQuery, myCon))
-                                {
-                                    myReader2 = myCommand2.ExecuteReader();
-                                    myReader2.Close();
-                                }
-                            }
-                            for (int i = 0; i < updatePatient.AllergyChangeLog.Updated.Count; i++)
-                            {
-                                string allergyUpadateQuery = "select updatepatientallergy(" +
-                                                            "_patient_id=>" + _id +
-                                                            ", _patient_allergy_id=>" + updatePatient.AllergyChangeLog.Updated[i].AllergyId +
-                                                            ", _allergy_master_id=>" + updatePatient.AllergyChangeLog.Updated[i].AllergyMasterId +
-                                                            ", _note=>" + CheckNullValue(updatePatient.AllergyChangeLog.Updated[i].Note) +
-                                                            ")";
-                                NpgsqlDataReader myReader2;
-                                using (NpgsqlCommand myCommand2 = new(allergyUpadateQuery, myCon))
-                                {
-                                    myReader2 = myCommand2.ExecuteReader();
-                                    myReader2.Close();
-                                }
-                            }
-                            for (int i = 0; i < updatePatient.AllergyChangeLog.Deleted.Count; i++)
-                            {
-                                string allergyDeleteQuery = "select deletepatientallergy("+
-                                                            "_patient_id=>"+ _id +
-                                                            ", _patient_allergy_id"+ updatePatient.AllergyChangeLog.Deleted[i].AllergyId +
-                                                            ");";
-                                using (NpgsqlCommand myCommand2 = new(allergyDeleteQuery, myCon))
-                                {
-                                    myCommand2.ExecuteReader();
-                                }
-                            }
-                            transactionScope.Complete();
+                        foreach (PatientAllergy allergy in updatePatient.AllergyChangeLog.Created)
+                        {
+                            string allergyCreateQuery = "select * from createpatientallergy(" +
+                                                        "_patient_id=>" + _id +
+                                                        ", _allergy_master_id=>" + allergy.AllergyMasterId +
+                                                        ", _note=>" + CheckNullValue(allergy.Note) +
+                                                        ")";
+                            myCon.Query(allergyCreateQuery);
                         }
+                        foreach (PatientAllergy allergy in updatePatient.AllergyChangeLog.Updated)
+                        {
+                            string allergyUpadateQuery = "select updatepatientallergy(" +
+                                                        "_patient_id=>" + _id +
+                                                        ", _patient_allergy_id=>" + allergy.PatientAllergyId +
+                                                        ", _allergy_master_id=>" + allergy.AllergyMasterId +
+                                                        ", _note=>" + CheckNullValue(allergy.Note) +
+                                                        ")";
+                            myCon.Query(allergyUpadateQuery);
+                        }
+                        foreach (DeletePatientAllergy allergy in updatePatient.AllergyChangeLog.Deleted)
+                        {
+                            string allergyDeleteQuery = "select deletepatientallergy(" +
+                                                        "_patient_id=>" + _id +
+                                                        ", _patient_allergy_id=>" + allergy.PatientAllergyId +
+                                                        ");";
+                            myCon.Query(allergyDeleteQuery);
+                        }
+                        transactionScope.Complete();
                     }
                     return await Task.FromResult(_id);
                 }
                 catch (Exception ex)
                 {
                     transactionScope.Dispose();
-                    Console.WriteLine(ex.Message);
+                    Console.WriteLine(ex);
                     return await Task.FromResult(0);
                 }
             }
@@ -346,28 +254,15 @@ namespace PatientDemographicsAPI.DataAccessLayer
                     using (NpgsqlConnection myCon = new(sqlDataSource))
                     {
                         myCon.Open();
-                        using (NpgsqlCommand myCommand = new(allAllergyDeleteQuery, myCon))
-                        {
-                            myCommand.Parameters.AddWithValue("id", id);
-                            myCommand.ExecuteReader();
-                        }
-                    }
-                    using (NpgsqlConnection myCon = new(sqlDataSource))
-                    {
-                        myCon.Open();
-                        using (NpgsqlCommand myCommand = new(patientDeleteQuery, myCon))
-                        {
-                            myCommand.Parameters.AddWithValue("id", id);
-                            myCommand.ExecuteReader();
-
-                        }
+                        myCon.Query(patientDeleteQuery);
+                        myCon.Query(allAllergyDeleteQuery);
                     }
                     transactionScope.Complete();
                 }
                 catch (Exception ex)
                 {
                     transactionScope.Dispose();
-                    Console.WriteLine(ex.Message);
+                    Console.WriteLine(ex);
                 }
                 return Task.FromResult("Deleted Sccessfully!");
             }
@@ -390,6 +285,87 @@ namespace PatientDemographicsAPI.DataAccessLayer
             CreateUpdatePatient updatePatient = JsonConvert.DeserializeObject<CreateUpdatePatient>(JsonConvert.SerializeObject(patientData.PatientList[0]));
             patientDoc.ApplyTo(updatePatient);
             return await UpdatePatient(id, updatePatient);
+        }
+        
+        /// <summary>
+        /// Testing
+        /// </summary>
+        /// <param name="req"></param>
+        /// <returns></returns>
+        public async Task<List<PatientDemographics>> Testing(RequestPatientData req)
+        {
+            string patient_list_get_query = "select * from getpatientwithallergy(" +
+                                            "_patient_id=>" + CheckNullValue(req.PatientId) +
+                                            ", _fname=>" + CheckNullValue(req.FirstName) +
+                                            ", _lname=>" + CheckNullValue(req.LastName) +
+                                            ", _dob=>" + CheckNullValue(req.Dob) +
+                                            ", _sex_type_id=>" + CheckNullValue(req.SexTypeId) +
+                                            ", _pagenumber=>" + CheckNullValue(req.PageNumber) +
+                                            ", _pagesize=>" + CheckNullValue(req.PageSize) +
+                                            ", _orderby=>" + CheckNullValue(req.OrderBy) +
+                                            ", _sorting=>" + CheckNullValue(req.Sorting) +
+                                            ", _allergy_master_id=>" + CheckNullValue(req.AllergyMasterId) +
+                                            ")";
+
+            using (NpgsqlConnection myCon = new(sqlDataSource))
+            {
+                myCon.Open();
+                var patientdata = (await myCon.QueryAsync<PatientDemographics, PatientAllergy, PatientDemographics>(patient_list_get_query,
+                                                                                                                        (patient, allergy) => {
+                                                                                                                        if(allergy != null)
+                                                                                                                            patient.PatientAllergy.Add(allergy);
+                                                                                                                        return patient;
+                                                                                                                    }, splitOn: "PatientAllergyId"))
+                                                                                                                    .GroupBy(patient => patient.PatientId);
+
+                List<PatientDemographics> patients = new();
+                foreach (IGrouping<int, PatientDemographics> patientGroup in patientdata)
+                {
+                    PatientDemographics patient =  patientGroup.First();
+                    foreach(PatientDemographics patientrecord in patientGroup.Skip(1))
+                    {
+                        patient.PatientAllergy.Add(patientrecord.PatientAllergy[0]);
+                    }
+                    patients.Add(patient);
+                }
+
+/*                    
+                foreach (var patient in patientdata)
+                {
+                    if (dr["patient_allergy_id"] != DBNull.Value)
+                    {
+                        patientAllergyList.AllergyList.Add(new PatientAllergy
+                        {
+                            PatientAllergyId = (int)dr["patient_allergy_id"],
+                            AllergyMasterId = (int)dr["allergy_master_id"],
+                            Note = dr["note"] == DBNull.Value ? "!" : dr["note"].ToString()
+                        });
+                    }
+
+                    if (table.Rows.IndexOf(dr) == table.Rows.Count - 1 || (int)dr["patient_id"] != (int)table.Rows[table.Rows.IndexOf(dr) + 1]["patient_id"])
+                    {
+                        patientData.PatientList.Add(new PatientDemographics
+                        {
+                            Patient_Id = (int)dr["patient_id"],
+                            FirstName = dr["fname"].ToString(),
+                            LastName = dr["lname"].ToString(),
+                            MiddleName = dr["mname"] == DBNull.Value ? null : dr["mname"].ToString(),
+                            Dob = dr["dob"] == DBNull.Value ? null : Convert.ToDateTime(dr["dob"]).ToString("dd/MM/yyyy"),
+                            SexTypeId = (int)dr["sex_type_id"],
+                            ChartNo = dr["chart_no"].ToString(),
+                            IsActive = Convert.ToBoolean(dr["is_active"]),
+                            PatientAllergy = patientAllergyList.AllergyList
+                        });
+                        patientAllergyList = new()
+                        {
+                            AllergyList = new List<PatientAllergy>()
+                        };
+                    }
+                }
+*/
+
+                return patients;
+            }
         }
     }
 }
