@@ -125,6 +125,7 @@ select * from testing(_allergy_master_id=>1);
 select * from testing( _fname => 'Raj',  _orderby=>'fname');
 
 select * from patient_allergy;
+select * from patient_demographics;
 
 
 
@@ -134,7 +135,7 @@ select pd.patient_id, pd.fname, pd.mname, pd.lname, pd.dob, pd.chart_no, pd.sex_
 	dense_rank() over (order by fname, pd.patient_id) denserank
 	from patient_demographics pd
 	left join patient_allergy pa on pa.patient_id=pd.patient_id and pa.is_deleted = false
-	where (pd.patient_id=62) and (pd.is_deleted=false and (pa.is_deleted=false or pa.is_deleted is null)) group by pd.patient_id,pa.patient_allergy_id order by fname
+	where (pd.patient_id=1) and (pd.is_deleted=false) group by pd.patient_id,pa.patient_allergy_id order by fname
 ) select * from patientdata where denserank between 1 and 10;
 
 
