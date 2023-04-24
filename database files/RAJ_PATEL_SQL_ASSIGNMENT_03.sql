@@ -53,7 +53,7 @@ select * from patient_demographics;
 
 
 
-create or replace function getpatientwithallergy(_patient_id int default null, _fname varchar(30) default null, _lname varchar(30) default null, _dob date default null, _sex_type_id int default null,
+create or replace function raj_getpatientwithallergy(_patient_id int default null, _fname varchar(30) default null, _lname varchar(30) default null, _dob date default null, _sex_type_id int default null,
 _pagenumber int default null, _pagesize int default null, _orderby varchar(30) default null, _sorting varchar default null, _allergy_master_id int default null)
 returns table(PatientId int, FirstName varchar, MiddleName varchar, LastName varchar, Dob date, ChartNo varchar, SexTypeId int, IsActive bool, PatientAllergyId int, AllergyMasterId int, Note varchar, denserank bigint) as
 $$
@@ -62,8 +62,8 @@ declare
 	select pd.patient_id, pd.fname, pd.mname, pd.lname, pd.dob, pd.chart_no, pd.sex_type_id, pd.is_active, pa.patient_allergy_id, pa.allergy_master_id, pa.note,
 	dense_rank() over (order by ';
 	query_start2 text := 'pd.patient_id) rowno
-	from patient_demographics pd
-	left join patient_allergy pa on pa.patient_id=pd.patient_id and pa.is_deleted = false ';
+	from raj_patient_demographics pd
+	left join raj_patient_allergy pa on pa.patient_id=pd.patient_id and pa.is_deleted = false ';
 	where_cond text := 'where pd.is_deleted=false ';
 	grp_order_query text := ' group by pd.patient_id, pa.patient_allergy_id order by ';
 	pagination_query text := ') select * from patientdata where rowno between ';

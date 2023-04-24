@@ -1,23 +1,23 @@
 {
   "Files": [
     {
-      "Id": "C:\\Users\\raj_p\\source\\repos\\Assignment\\Assignment\\wwwroot\\index.html",
+      "Id": "C:\\Users\\raj_p\\source\\repos\\meditab_project\\Assignment\\wwwroot\\index.html",
       "PackagePath": "staticwebassets\\index.html"
     },
     {
-      "Id": "C:\\Users\\raj_p\\source\\repos\\Assignment\\Assignment\\wwwroot\\src\\css\\style.css",
+      "Id": "C:\\Users\\raj_p\\source\\repos\\meditab_project\\Assignment\\wwwroot\\src\\css\\style.css",
       "PackagePath": "staticwebassets\\src\\css\\style.css"
     },
     {
-      "Id": "C:\\Users\\raj_p\\source\\repos\\Assignment\\Assignment\\wwwroot\\src\\images\\avatar.jpg",
+      "Id": "C:\\Users\\raj_p\\source\\repos\\meditab_project\\Assignment\\wwwroot\\src\\images\\avatar.jpg",
       "PackagePath": "staticwebassets\\src\\images\\avatar.jpg"
     },
     {
-      "Id": "C:\\Users\\raj_p\\source\\repos\\Assignment\\Assignment\\wwwroot\\src\\images\\avatar_none.png",
+      "Id": "C:\\Users\\raj_p\\source\\repos\\meditab_project\\Assignment\\wwwroot\\src\\images\\avatar_none.png",
       "PackagePath": "staticwebassets\\src\\images\\avatar_none.png"
     },
     {
-      "Id": "C:\\Users\\raj_p\\source\\repos\\Assignment\\Assignment\\wwwroot\\src\\js\\main.js",
+      "Id": "C:\\Users\\raj_p\\source\\repos\\meditab_project\\Assignment\\wwwroot\\src\\js\\main.js",
       "PackagePath": "staticwebassets\\src\\js\\main.js"
     },
     {

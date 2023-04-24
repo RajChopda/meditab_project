@@ -1,36 +1,35 @@
-create table sex_type(
+create table raj_sex_type(
 	sex_type_id serial primary key,
 	sex_type_value varchar(20) not null,
     created_on timestamp default current_timestamp not null,
     modified_on timestamp default current_timestamp not null
 )
 
-alter table sex_type rename column sex_type to sex_type_value;
-
-create table patient_demographics(
+create table raj_patient_demographics(
 	patient_id serial primary key,
 	fname varchar(30) not null,
 	mname varchar(30),
 	lname varchar(30) not null,
 	dob date,
-	sex_type_id int references sex_type(sex_type_id),
+	sex_type_id int references raj_sex_type(sex_type_id),
 	chart_no varchar(30) not null generated always as ('CHART'||patient_id::text) stored,
+	is_active bool default true,
 	is_deleted bool default false not null,
     created_on timestamp default current_timestamp not null,
     modified_on timestamp default current_timestamp not null
 );
 
-insert into sex_type(sex_type_value) values('Male');
+insert into raj_sex_type(sex_type_value) values('Male');
 
-insert into sex_type(sex_type_value) values('Female');
+insert into raj_sex_type(sex_type_value) values('Female');
 
-insert into sex_type(sex_type_value) values('Unknown');
+insert into raj_sex_type(sex_type_value) values('Unknown');
 
-select * from sex_type;
+select * from raj_sex_type;
 
-insert into patient_demographics (fname, mname, lname, dob, sex_type_id) values ('Raj', 'Gordhanbhai', 'Chopda', '2002-02-13', 1);
+insert into raj_patient_demographics (fname, mname, lname, dob, sex_type_id) values ('Raj', 'Gordhanbhai', 'Chopda', '2002-02-13', 1);
 
-select * from patient_demographics;
+select * from raj_patient_demographics;
 
 create table race_type(
 	race_type_id serial primary key,

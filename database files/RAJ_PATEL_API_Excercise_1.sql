@@ -1,4 +1,4 @@
-create table allergy_master(
+create table raj_allergy_master(
 	allergy_master_id serial primary key,
 	allergy_code varchar(10),
 	allergy_name varchar(30),
@@ -6,14 +6,14 @@ create table allergy_master(
 	modified_on timestamp default current_timestamp not null
 );
 
-insert into allergy_master(allergy_code, allergy_name) values ('A1', 'peanuts');
-insert into allergy_master(allergy_code, allergy_name) values ('A2', 'milk');
-insert into allergy_master(allergy_code, allergy_name) values ('A3', 'bread');
+insert into raj_allergy_master(allergy_code, allergy_name) values ('A1', 'peanuts');
+insert into raj_allergy_master(allergy_code, allergy_name) values ('A2', 'milk');
+insert into raj_allergy_master(allergy_code, allergy_name) values ('A3', 'bread');
 
-select * from allergy_master;
+select * from raj_allergy_master;
 
 
-create table patient_allergy(
+create table raj_patient_allergy(
 	patient_allergy_id serial primary key,
 	patient_id int references patient_demographics(patient_id),
 	allergy_master_id int references allergy_master(allergy_master_id),
@@ -23,62 +23,69 @@ create table patient_allergy(
 	is_deleted bool default false
 );
 
-select * from patient_allergy;
+select * from raj_patient_allergy;
 
 
-create or replace function getallergyofpatient(_patient_id int)
+select * from raj_getpatientwithallergy();
+
+insert into raj_patient_allergy (patient_id, allergy_master_id, note) values (1, 1, 'High');
+insert into raj_patient_allergy (patient_id, allergy_master_id, note) values (1, 3, 'Low');
+
+
+
+create or replace function raj_getallergyofpatient(_patient_id int)
 returns table(patient_allergy_id int, allergy_master_id int, note varchar) as
 $$
 declare
 begin
-	return query execute 'select patient_allergy_id, allergy_master_id, note from patient_allergy where patient_id=$1 and is_deleted=false' using $1;
+	return query execute 'select patient_allergy_id, allergy_master_id, note from raj_patient_allergy where patient_id=$1 and is_deleted=false' using $1;
 end
 $$ language plpgsql;
 
 
-create or replace function createpatientallergy(_patient_id int, _allergy_master_id int, _note varchar(100))
+create or replace function raj_createpatientallergy(_patient_id int, _allergy_master_id int, _note varchar(100))
 returns table(patient_allergy_id int) as
 $$
 declare
 begin
-	return query execute 'insert into patient_allergy (patient_id, allergy_master_id, note) values ($1, $2, $3) returning patient_allergy_id' using $1, $2, $3;
+	return query execute 'insert into raj_patient_allergy (patient_id, allergy_master_id, note) values ($1, $2, $3) returning patient_allergy_id' using $1, $2, $3;
 end
 $$ language plpgsql;
 
 
-create or replace function updatepatientallergy(_patient_id int, _patient_allergy_id int, _allergy_master_id int, _note varchar(100))
+create or replace function raj_updatepatientallergy(_patient_id int, _patient_allergy_id int, _allergy_master_id int, _note varchar(100))
 returns table(patient_allergy_id int) as
 $$
 declare
 begin
-	return query execute 'update patient_allergy set allergy_master_id=$3, note=$4 where patient_id=$1 and patient_allergy_id=$2 and is_deleted=false returning patient_allergy_id' using $1, $2, $3, $4;
+	return query execute 'update raj_patient_allergy set allergy_master_id=$3, note=$4 where patient_id=$1 and patient_allergy_id=$2 and is_deleted=false returning patient_allergy_id' using $1, $2, $3, $4;
 end
 $$ language plpgsql;
 
 
-create or replace function deletepatientallergy(_patient_id int, _patient_allergy_id int)
+create or replace function raj_deletepatientallergy(_patient_id int, _patient_allergy_id int)
 returns void as
 $$
 declare
 begin
-	 update patient_allergy set is_deleted=true where patient_id=$1 and patient_allergy_id=$2;
+	 update raj_patient_allergy set is_deleted=true where patient_id=$1 and patient_allergy_id=$2;
 end
 $$ language plpgsql;
 
 
-create or replace function deleteallpatientallergy(_patient_id int)
+create or replace function raj_deleteallpatientallergy(_patient_id int)
 returns void as
 $$
 declare
 begin
-	 update patient_allergy set is_deleted=true where patient_id=$1;
+	 update raj_patient_allergy set is_deleted=true where patient_id=$1;
 end
 $$ language plpgsql;
 
 
 
 
-select * from getallergyofpatient(_patient_id=>1);
+select * from raj_getallergyofpatient(_patient_id=>1);
 
 
 create or replace function testing(_patient_id int default null, _fname varchar(30) default null, _lname varchar(30) default null, _dob date default null, _sex_type_id int default null,
@@ -124,8 +131,8 @@ select * from testing(_allergy_master_id=>1);
 
 select * from testing( _fname => 'Raj',  _orderby=>'fname');
 
-select * from patient_allergy;
-select * from patient_demographics;
+select * from raj_patient_allergy;
+select * from raj_patient_demographics;
 
 
 

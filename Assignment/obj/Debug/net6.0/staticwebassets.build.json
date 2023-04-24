@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "3C0BeFqjFTB1ggj3VRsI3cTThj0G8UFg0qdTxxFB8R8=",
+  "Hash": "yl+GUyRpksyj7xLrKlLOB1lsLnW6YvC4eLFwk/k86F4=",
   "Source": "PatientDemographicsAPI",
   "BasePath": "_content/PatientDemographicsAPI",
   "Mode": "Default",
@@ -10,17 +10,17 @@
     {
       "Name": "PatientDemographicsAPI\\wwwroot",
       "Source": "PatientDemographicsAPI",
-      "ContentRoot": "C:\\Users\\raj_p\\source\\repos\\Assignment\\Assignment\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\raj_p\\source\\repos\\meditab_project\\Assignment\\wwwroot\\",
       "BasePath": "_content/PatientDemographicsAPI",
       "Pattern": "**"
     }
   ],
   "Assets": [
     {
-      "Identity": "C:\\Users\\raj_p\\source\\repos\\Assignment\\Assignment\\wwwroot\\index.html",
+      "Identity": "C:\\Users\\raj_p\\source\\repos\\meditab_project\\Assignment\\wwwroot\\index.html",
       "SourceId": "PatientDemographicsAPI",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\raj_p\\source\\repos\\Assignment\\Assignment\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\raj_p\\source\\repos\\meditab_project\\Assignment\\wwwroot\\",
       "BasePath": "_content/PatientDemographicsAPI",
       "RelativePath": "index.html",
       "AssetKind": "All",
@@ -34,10 +34,10 @@
       "OriginalItemSpec": "wwwroot\\index.html"
     },
     {
-      "Identity": "C:\\Users\\raj_p\\source\\repos\\Assignment\\Assignment\\wwwroot\\src\\css\\style.css",
+      "Identity": "C:\\Users\\raj_p\\source\\repos\\meditab_project\\Assignment\\wwwroot\\src\\css\\style.css",
       "SourceId": "PatientDemographicsAPI",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\raj_p\\source\\repos\\Assignment\\Assignment\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\raj_p\\source\\repos\\meditab_project\\Assignment\\wwwroot\\",
       "BasePath": "_content/PatientDemographicsAPI",
       "RelativePath": "src/css/style.css",
       "AssetKind": "All",
@@ -51,10 +51,10 @@
       "OriginalItemSpec": "wwwroot\\src\\css\\style.css"
     },
     {
-      "Identity": "C:\\Users\\raj_p\\source\\repos\\Assignment\\Assignment\\wwwroot\\src\\images\\avatar.jpg",
+      "Identity": "C:\\Users\\raj_p\\source\\repos\\meditab_project\\Assignment\\wwwroot\\src\\images\\avatar.jpg",
       "SourceId": "PatientDemographicsAPI",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\raj_p\\source\\repos\\Assignment\\Assignment\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\raj_p\\source\\repos\\meditab_project\\Assignment\\wwwroot\\",
       "BasePath": "_content/PatientDemographicsAPI",
       "RelativePath": "src/images/avatar.jpg",
       "AssetKind": "All",
@@ -68,10 +68,10 @@
       "OriginalItemSpec": "wwwroot\\src\\images\\avatar.jpg"
     },
     {
-      "Identity": "C:\\Users\\raj_p\\source\\repos\\Assignment\\Assignment\\wwwroot\\src\\images\\avatar_none.png",
+      "Identity": "C:\\Users\\raj_p\\source\\repos\\meditab_project\\Assignment\\wwwroot\\src\\images\\avatar_none.png",
       "SourceId": "PatientDemographicsAPI",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\raj_p\\source\\repos\\Assignment\\Assignment\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\raj_p\\source\\repos\\meditab_project\\Assignment\\wwwroot\\",
       "BasePath": "_content/PatientDemographicsAPI",
       "RelativePath": "src/images/avatar_none.png",
       "AssetKind": "All",
@@ -85,10 +85,10 @@
       "OriginalItemSpec": "wwwroot\\src\\images\\avatar_none.png"
     },
     {
-      "Identity": "C:\\Users\\raj_p\\source\\repos\\Assignment\\Assignment\\wwwroot\\src\\js\\main.js",
+      "Identity": "C:\\Users\\raj_p\\source\\repos\\meditab_project\\Assignment\\wwwroot\\src\\js\\main.js",
       "SourceId": "PatientDemographicsAPI",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\raj_p\\source\\repos\\Assignment\\Assignment\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\raj_p\\source\\repos\\meditab_project\\Assignment\\wwwroot\\",
       "BasePath": "_content/PatientDemographicsAPI",
       "RelativePath": "src/js/main.js",
       "AssetKind": "All",
